@@ -1,9 +1,9 @@
-import loginSchema from "../validators/accounts";
 import {
   retrieveAccountDetail,
   performAccountLogin,
   performAccountLogout,
-} from "../services/accounts";
+} from '../services';
+import loginSchema from '../validators';
 
 export async function login(req, res) {
   try {
@@ -15,6 +15,6 @@ export async function login(req, res) {
   }
 }
 
-export async function detail(req, res) { }
+export async function detail(req, res) {}
 
-export async function logout(req, res) { }
+export async function logout(req, res) {}

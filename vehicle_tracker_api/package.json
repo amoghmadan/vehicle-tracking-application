@@ -4,7 +4,7 @@
   "description": "Vehicle Tracking APIs",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint src",
+    "lint": "eslint --fix src/**/*",
     "createsuperuser": "node dist/app.js createsuperuser",
     "createsuperuser:dev": "babel-node src/app.js createsuperuser",
     "build": "babel src --out-dir dist",

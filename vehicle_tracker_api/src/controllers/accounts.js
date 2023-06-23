@@ -1,20 +1,29 @@
-import {
-  retrieveAccountDetail,
-  performAccountLogin,
-  performAccountLogout,
-} from '../services';
-import loginSchema from '../validators';
+import { performLoginService, performLogoutService, retrieveUserService } from '../services';
+import { loginSchema } from '../validators';
 
-export async function login(req, res) {
+const handleErrorResponse = (response, statusCode, message) => response.status(statusCode).json({ detail: message });
+
+export async function login(request, response) {
   try {
-    const validatedData = await loginSchema.validateAsync(req.body);
-    const token = await performAccountLogin(validatedData);
-    return res.status(201).json({ token: token });
-  } catch (e) {
-    return res.status(400).json(e);
+    const validatedData = await loginSchema.validateAsync(request.body);
+    const data = await performLoginService(validatedData);
+
+    if (!data) {
+      return handleErrorResponse(response, 401, 'Invalid credentials!');
+    }
+
+    return response.status(201).json(data);
+  } catch (error) {
+    return handleErrorResponse(response, 400, error);
   }
 }
 
-export async function detail(req, res) {}
+export async function detail(request, response) {
+  const data = await retrieveUserService(request.user);
+  return response.status(200).json(data);
+}
 
-export async function logout(req, res) {}
+export async function logout(request, response) {
+  const data = await performLogoutService(request.user);
+  return response.status(204).json(data);
+}

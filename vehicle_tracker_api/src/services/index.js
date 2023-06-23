@@ -1,7 +1,7 @@
 import {
-  performAccountLogin,
-  performAccountLogout,
-  retrieveAccountDetail,
+  performLoginService,
+  performLogoutService,
+  retrieveUserService,
 } from './accounts';
 
-export { performAccountLogin, performAccountLogout, retrieveAccountDetail };
+export { performLoginService, performLogoutService, retrieveUserService };

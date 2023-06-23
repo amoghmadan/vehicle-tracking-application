@@ -1,3 +1,3 @@
-import loginSchema from './accounts';
+import { loginSchema } from './accounts';
 
 export { loginSchema };

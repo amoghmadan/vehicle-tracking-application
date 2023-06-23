@@ -18,7 +18,7 @@ yargs
     },
     async (args) => {
       await bootstrap(Number(args.port), String(args.host));
-    }
+    },
   )
   .command(
     'createsuperuser [email] [firstName] [lastName] [password]',
@@ -35,7 +35,7 @@ yargs
         args.email,
         args.firstName,
         args.lastName,
-        args.password
+        args.password,
       );
-    }
+    },
   ).argv;

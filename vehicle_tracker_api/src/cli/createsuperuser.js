@@ -16,9 +16,11 @@ export default async function createsuperuser(
   email,
   firstName,
   lastName,
-  password
+  password,
 ) {
-  const args = { email, firstName, lastName, password };
+  const args = {
+    email, firstName, lastName, password,
+  };
   const validatedData = await createSuperUserSchema.validateAsync(args);
   validatedData.password = await hash(validatedData.password, SALT);
   validatedData.isAdmin = true;

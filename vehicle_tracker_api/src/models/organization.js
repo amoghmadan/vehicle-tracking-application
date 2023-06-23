@@ -6,6 +6,6 @@ const organizationSchema = new Schema({
   isActive: { type: Boolean, require: true, default: true },
 }, { timestamps: { createdAt: 'created', updatedAt: 'updated' } });
 
-const Oragnization = model('Organization', organizationSchema);
+const Organization = model('Organization', organizationSchema);
 
-export default Oragnization;
+export default Organization;

@@ -1,5 +1,5 @@
-import Oragnization from './organization';
+import Organization from './organization';
 import Tracker from './tracker';
 import User from './user';
 
-export { Oragnization, Tracker, User };
+export { Organization, Tracker, User };

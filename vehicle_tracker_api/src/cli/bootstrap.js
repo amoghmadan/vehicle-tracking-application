@@ -9,7 +9,7 @@ import { authenticate } from '../middlewares';
 import urlpatterns from '../routes';
 import { MONGO_URI } from '../settings';
 
-export function getRequestListner() {
+export function getRequestListener() {
   const application = express();
   application.use(helmet());
   application.use(express.urlencoded({ extended: true }));
@@ -25,10 +25,10 @@ export function getRequestListner() {
 }
 
 export default async function bootstrap(port, host) {
-  const requestListner = getRequestListner();
+  const requestListener = getRequestListener();
 
   const options = {};
-  const server = new Server(options, requestListner);
+  const server = new Server(options, requestListener);
 
   await mongoose.connect(MONGO_URI);
   server.listen(port, host, () => {

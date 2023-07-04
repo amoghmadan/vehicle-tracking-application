@@ -1,7 +1,9 @@
 import { performLoginService, performLogoutService, retrieveUserService } from '../services';
 import { loginSchema } from '../validators';
 
-const handleErrorResponse = (response, statusCode, message) => response.status(statusCode).json({ detail: message });
+function handleErrorResponse(response, statusCode, message) {
+  return response.status(statusCode).json({ detail: message });
+}
 
 export async function login(request, response) {
   try {

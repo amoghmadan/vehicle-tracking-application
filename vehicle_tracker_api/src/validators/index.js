@@ -3,5 +3,9 @@ import { createOrganizationSchema, updateOrganizationSchema } from './organizati
 import { createTrackerSchema, updateTrackerSchema } from './tracker';
 
 export {
-  createOrganizationSchema, createTrackerSchema, loginSchema, updateOrganizationSchema, updateTrackerSchema,
+  createOrganizationSchema,
+  createTrackerSchema,
+  loginSchema,
+  updateOrganizationSchema,
+  updateTrackerSchema,
 };

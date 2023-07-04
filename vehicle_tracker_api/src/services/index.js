@@ -3,5 +3,19 @@ import {
   performLogoutService,
   retrieveUserService,
 } from './accounts';
+import {
+  createOrganizationService,
+  listOrganizationService,
+  partialUpdateOrganizationService,
+  retrieveOrganizationService,
+} from './organizations';
 
-export { performLoginService, performLogoutService, retrieveUserService };
+export {
+  createOrganizationService,
+  listOrganizationService,
+  partialUpdateOrganizationService,
+  performLoginService,
+  performLogoutService,
+  retrieveUserService,
+  retrieveOrganizationService,
+};

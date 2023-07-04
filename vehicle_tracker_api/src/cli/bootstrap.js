@@ -9,20 +9,26 @@ import { authenticate } from '../middlewares';
 import urlpatterns from '../routes';
 import { MONGO_URI } from '../settings';
 
-export default async function bootstrap(port, host) {
-  const app = express();
-  app.use(helmet());
-  app.use(express.urlencoded({ extended: true }));
-  app.use(express.json());
-  app.use(morgan('combined'));
-  app.use(authenticate);
+export function getRequestListner() {
+  const application = express();
+  application.use(helmet());
+  application.use(express.urlencoded({ extended: true }));
+  application.use(express.json());
+  application.use(morgan('combined'));
+  application.use(authenticate);
 
   urlpatterns.forEach((router, pattern) => {
-    app.use(pattern, router);
+    application.use(pattern, router);
   });
 
-  const serverOptions = {};
-  const server = new Server(serverOptions, app);
+  return application;
+}
+
+export default async function bootstrap(port, host) {
+  const requestListner = getRequestListner();
+
+  const options = {};
+  const server = new Server(options, requestListner);
 
   await mongoose.connect(MONGO_URI);
   server.listen(port, host, () => {

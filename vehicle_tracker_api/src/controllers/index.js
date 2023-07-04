@@ -1,3 +1,6 @@
 import { detail, login, logout } from './accounts';
+import { createOrganization, listOrganization, partialUpdateOrganization } from './organizations';
 
-export { detail, login, logout };
+export {
+  createOrganization, detail, listOrganization, login, logout, partialUpdateOrganization,
+};

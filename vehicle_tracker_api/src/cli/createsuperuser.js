@@ -1,9 +1,9 @@
-import { hash } from 'bcryptjs';
+import {hash} from 'bcryptjs';
 import Joi from 'joi';
 import mongoose from 'mongoose';
 
-import { User } from '../models';
-import { MONGO_URI, SALT } from '../settings';
+import {User} from '../models';
+import {MONGO_URI, SALT} from '../settings';
 
 const createSuperUserSchema = Joi.object({
   email: Joi.string().email().required(),
@@ -12,11 +12,18 @@ const createSuperUserSchema = Joi.object({
   password: Joi.string().min(3).required(),
 });
 
+/**
+ * Create new super user.
+ * @param {String} email
+ * @param {String} firstName
+ * @param {String} lastName
+ * @param {String} password
+ */
 export default async function createsuperuser(
-  email,
-  firstName,
-  lastName,
-  password,
+    email,
+    firstName,
+    lastName,
+    password,
 ) {
   const args = {
     email, firstName, lastName, password,

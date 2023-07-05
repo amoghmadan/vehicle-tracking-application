@@ -1,19 +1,19 @@
-import { compareSync } from 'bcryptjs';
-import { User } from '../models';
-import { generateKey } from '../utils/token';
+import {compareSync} from 'bcryptjs';
+import {User} from '../models';
+import {generateKey} from '../utils/token';
 
 export async function performLoginService(payload) {
-  const user = await User.findOne({ email: payload.email, isActive: true });
+  const user = await User.findOne({email: payload.email, isActive: true});
 
   if (!user) return null;
   if (!compareSync(payload.password, user.password)) return null;
   if (!user.token) {
-    user.token = { key: generateKey() };
+    user.token = {key: generateKey()};
     user.lastLogin = user.token.created;
     await user.save();
   }
 
-  return { token: user.token.key };
+  return {token: user.token.key};
 }
 
 export async function retrieveUserService(user) {
@@ -28,7 +28,7 @@ export async function retrieveUserService(user) {
 }
 
 export async function performLogoutService(user) {
-  user.set('token', undefined, { strict: false });
+  user.set('token', undefined, {strict: false});
   await user.save();
 
   return {};

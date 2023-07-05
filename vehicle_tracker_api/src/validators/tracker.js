@@ -9,3 +9,5 @@ export const updateTrackerSchema = Joi.object({
   vehicleNumber: Joi.string().min(1),
   organization: Joi.string().min(7),
 });
+
+export const outTimeSchema = Joi.object({});

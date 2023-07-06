@@ -50,8 +50,9 @@ export const updateTrackerController = async (request, response) => {
 };
 
 export const getAllTrackersController = async (request, response) => {
+  const queryParams = request.query;
   try {
-    const trackers = await listTrackerService();
+    const trackers = await listTrackerService(queryParams);
     response.status(200).json(trackers);
   } catch (error) {
     response.status(500).json({error: 'Failed to retrieve trackers'});

@@ -5,22 +5,16 @@ import {
 } from '../services';
 import {loginSchema} from '../validators';
 
-function handleErrorResponse(response, statusCode, message) {
-  return response.status(statusCode).json({detail: message});
-}
-
 export async function login(request, response) {
   try {
     const validatedData = await loginSchema.validateAsync(request.body);
     const data = await performLoginService(validatedData);
-
     if (!data) {
-      return handleErrorResponse(response, 401, 'Invalid credentials!');
+      return response.status(401).json({detail: 'Invalid credentials!'});
     }
-
     return response.status(201).json(data);
   } catch (error) {
-    return handleErrorResponse(response, 400, error);
+    return response.status(400).json({detail: error});
   }
 }
 

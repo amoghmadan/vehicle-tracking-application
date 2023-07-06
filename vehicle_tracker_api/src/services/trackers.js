@@ -18,8 +18,18 @@ export const updateTrackerService = async (id, payload) => {
   return updatedTracker;
 };
 
-export const listTrackerService = async () => {
-  const trackers = await Tracker.find();
+export const listTrackerService = async (query) => {
+  const filter = {user: user._id};
+  let {date} = query;
+  if (!date) {
+    date = new Date().toISOString().split('T')[0];
+  }
+
+  filter.created = {
+    $gte: new Date(`${date}T00:00:00Z`),
+    $lte: new Date(`${date}T23:59:59Z`),
+  };
+  const trackers = await Tracker.find(filter);
   return trackers;
 };
 

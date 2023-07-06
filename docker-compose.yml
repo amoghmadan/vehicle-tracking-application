@@ -1,0 +1,43 @@
+version: "3"
+
+services:
+  db:
+    container_name: Vehicle-Tracker-MongoDB
+    image: mongo:latest
+    restart: always
+    volumes:
+      - ./datadb:/data/db
+  api:
+    build: .
+    command: >
+      bash -c "
+        cd vehicle_tracker_webui 
+        && npm install @esbuild/linux-x64 --location=project 
+        && npm run build 
+        && cd ../vehicle_tracker_api 
+        && npm run build 
+        && npm start
+      "
+    container_name: Vehicle-Tracker-API
+    depends_on:
+      - db
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    image: vehicle-tracker:api
+    restart: always
+    volumes:
+      - /vehicle-tracker/vehicle_tracker_api/node_modules
+      - /vehicle-tracker/vehicle_tracker_webui/node_modules
+      - .:/vehicle-tracker
+  nginx:
+    container_name: Vehicle-Tracker-NGINX
+    depends_on:
+      - api
+    image: nginx:latest
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+      - ./certs:/etc/ssl/certs
+      - ./vehicle_tracker_webui/dist:/var/www/html

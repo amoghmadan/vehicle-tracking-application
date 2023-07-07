@@ -6,8 +6,8 @@ import {
 } from './organizations';
 import {
   createTrackerController,
-  getAllTrackersController,
   leftFacilityController,
+  listTrackerController,
   updateTrackerController,
 } from './trackers';
 
@@ -15,8 +15,8 @@ export {
   createOrganization,
   createTrackerController,
   detail,
-  getAllTrackersController,
   leftFacilityController,
+  listTrackerController,
   listOrganization,
   login,
   logout,

@@ -11,6 +11,12 @@ import {
   updateOrganizationSchema,
 } from '../validators';
 
+/**
+ * Create new Organization API
+ * @param {express.Request} request Request Object
+ * @param {express.Response} response Response Object
+ * @return {express.Response} Final Response
+ */
 export async function createOrganization(request, response) {
   if (!request.user.isAdmin) {
     return response.status(401).json(
@@ -28,11 +34,23 @@ export async function createOrganization(request, response) {
   }
 }
 
+/**
+ * List All Organization API
+ * @param {express.Request} request Request Object
+ * @param {express.Response} response Response Object
+ * @return {express.Response} Final Response
+ */
 export async function listOrganization(request, response) {
   const data = await listOrganizationService(request.user);
   return response.status(200).json(data);
 }
 
+/**
+ * Partial Update Organization API
+ * @param {express.Request} request Request Object
+ * @param {express.Response} response Response Object
+ * @return {express.Response} Final Response
+ */
 export async function partialUpdateOrganization(request, response) {
   if (!request.user.isAdmin) {
     return response.status(401).json(

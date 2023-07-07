@@ -13,6 +13,12 @@ import {
   updateTrackerSchema,
 } from '../validators';
 
+/**
+ * Create new Tracker API
+ * @param {express.Request} request Request Object
+ * @param {express.Response} response Response Object
+ * @return {express.Response} Final Response
+ */
 export const createTrackerController = async (request, response) => {
   try {
     if (request.user.isAdmin) {
@@ -30,6 +36,12 @@ export const createTrackerController = async (request, response) => {
   }
 };
 
+/**
+ * Update Tracker API
+ * @param {express.Request} request Request Object
+ * @param {express.Response} response Response Object
+ * @return {express.Response} Final Response
+ */
 export const updateTrackerController = async (request, response) => {
   if (request.user.isAdmin) {
     return response.status(401).json(
@@ -50,7 +62,13 @@ export const updateTrackerController = async (request, response) => {
   }
 };
 
-export const getAllTrackersController = async (request, response) => {
+/**
+ * List Tracker API
+ * @param {express.Request} request Request Object
+ * @param {express.Response} response Response Object
+ * @return {express.Response} Final Response
+ */
+export const listTrackerController = async (request, response) => {
   const queryParams = request.query;
   try {
     const trackers = await listTrackerService(queryParams);
@@ -60,6 +78,12 @@ export const getAllTrackersController = async (request, response) => {
   }
 };
 
+/**
+ * Mark Out API
+ * @param {express.Request} request Request Object
+ * @param {express.Response} response Response Object
+ * @return {express.Response} Final Response
+ */
 export const leftFacilityController = async (request, response) => {
   if (request.user.isAdmin) {
     return response.status(401).json(

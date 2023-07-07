@@ -1,5 +1,3 @@
-import {STATUS_CODES} from 'http';
-
 import {
   performLoginService,
   performLogoutService,
@@ -15,8 +13,8 @@ export async function login(request, response) {
       return response.status(401).json({detail: 'Invalid credentials!'});
     }
     return response.status(201).json(data);
-  } catch (error) {
-    return response.status(400).json(error);
+  } catch (e) {
+    return response.status(400).json(e);
   }
 }
 

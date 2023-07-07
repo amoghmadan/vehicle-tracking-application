@@ -22,6 +22,7 @@ export async function retrieveUserService(user) {
     firstName: user.firstName,
     lastName: user.lastName,
     dateJoined: user.dateJoined,
+    isAdmin: user.isAdmin,
   };
 
   return detail;

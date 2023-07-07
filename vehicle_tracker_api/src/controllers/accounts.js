@@ -1,3 +1,5 @@
+import {STATUS_CODES} from 'http';
+
 import {
   performLoginService,
   performLogoutService,
@@ -14,7 +16,7 @@ export async function login(request, response) {
     }
     return response.status(201).json(data);
   } catch (error) {
-    return response.status(400).json({detail: error});
+    return response.status(400).json(error);
   }
 }
 

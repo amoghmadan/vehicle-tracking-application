@@ -1,3 +1,5 @@
+import {STATUS_CODES} from 'http';
+
 import {
   createTrackerService,
   leftFacilityService,
@@ -14,8 +16,8 @@ import {
 export const createTrackerController = async (request, response) => {
   try {
     if (request.user.isAdmin) {
-      return response.status(403).json(
-          {error: 'Only non-admin users can create trackers'},
+      return response.status(401).json(
+          {detail: STATUS_CODES[401]},
       );
     }
     const validatedData = await createTrackerSchema.validateAsync(request.body);
@@ -23,29 +25,28 @@ export const createTrackerController = async (request, response) => {
         validatedData, request.user,
     );
     return response.status(201).json(createdTracker);
-  } catch (error) {
-    return response.status(500).json({error: 'Failed to create tracker.'});
+  } catch (e) {
+    return response.status(400).json(e);
   }
 };
 
 export const updateTrackerController = async (request, response) => {
   if (request.user.isAdmin) {
-    return response.status(403).json(
-        {error: 'Only non-admin users can update trackers'},
-    );
+    return response.status(401).json(
+        {detail: STATUS_CODES[401]});
   }
   const {id} = request.params;
   const tracker = await retrieveTrackerService(id);
   if (!tracker) {
-    return response.status(404).json({error: 'Tracker not found'});
+    return response.status(404).json({detail: STATUS_CODES[404]});
   }
 
   try {
     const validatedData = await updateTrackerSchema.validateAsync(request.body);
     const updatedTracker = await updateTrackerService(id, validatedData);
     return response.status(200).json(updatedTracker);
-  } catch (error) {
-    return response.status(500).json({error: 'Failed to update tracker'});
+  } catch (e) {
+    return response.status(400).json(e);
   }
 };
 
@@ -54,21 +55,21 @@ export const getAllTrackersController = async (request, response) => {
   try {
     const trackers = await listTrackerService(queryParams);
     response.status(200).json(trackers);
-  } catch (error) {
-    response.status(500).json({error: 'Failed to retrieve trackers'});
+  } catch (e) {
+    response.status(500).json({detail: STATUS_CODES[500]});
   }
 };
 
 export const leftFacilityController = async (request, response) => {
   if (request.user.isAdmin) {
-    return response.status(403).json(
-        {error: 'Only non-admin users can update trackers'},
+    return response.status(401).json(
+        {detail: STATUS_CODES[401]},
     );
   }
   const {id} = request.params;
   const found = await retrieveTrackerService(id);
   if (!found) {
-    return response.status(404).json({detail: 'Not found.'});
+    return response.status(404).json({detail: STATUS_CODES[404]});
   }
   try {
     await outTimeSchema.validateAsync(request.body);

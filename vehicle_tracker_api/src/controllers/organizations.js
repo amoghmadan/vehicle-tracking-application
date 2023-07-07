@@ -1,3 +1,5 @@
+import {STATUS_CODES} from 'http';
+
 import {
   createOrganizationService,
   listOrganizationService,
@@ -11,8 +13,8 @@ import {
 
 export async function createOrganization(request, response) {
   if (!request.user.isAdmin) {
-    return response.status(403).json(
-        {detail: 'Only admin users can create organizations.'},
+    return response.status(401).json(
+        {detail: STATUS_CODES[401]},
     );
   }
   try {
@@ -33,15 +35,15 @@ export async function listOrganization(request, response) {
 
 export async function partialUpdateOrganization(request, response) {
   if (!request.user.isAdmin) {
-    return response.status(403).json(
-        {detail: 'Only admin users can update organizations.'},
+    return response.status(401).json(
+        {detail: STATUS_CODES[401]},
     );
   }
   const {id} = request.params;
   const organization = await retrieveOrganizationService(id, request.user);
 
   if (!organization) {
-    return response.status(404).json({detail: 'Not found.'});
+    return response.status(404).json({detail: STATUS_CODES[404]});
   }
 
   try {

@@ -1,27 +1,173 @@
-import dotenv from 'dotenv';
+import 'dotenv/config';
 import mongoose from 'mongoose';
 import request from 'supertest';
 
 import {getRequestListener} from '../src/cli/bootstrap';
-
-dotenv.config();
+import {User} from '../src/models';
+import {generateKey} from '../src/utils/token';
 
 const app = getRequestListener();
 
-beforeEach(async () => {
-  await mongoose.connect(process.env.MONGO_URI);
-});
+describe('Account API Tests', () => {
+  beforeAll(async () => {
+    await mongoose.connect(process.env.MONGO_URI);
+  });
 
-afterEach(async () => {
-  await mongoose.connection.close();
-});
+  afterAll(async () => {
+    await User.deleteMany({});
+    await mongoose.connection.close();
+  });
 
-describe('POST /api/v1/accounts/login', () => {
-  it('Performs Account Login', async () => {
-    const payload = {email: 'test.user@example.com', password: 'foo'};
-    const response = await request(app)
-        .post('/api/v1/accounts/login')
-        .send(payload);
-    expect(response.status).toBe(400);
+  beforeEach(async () => {
+    await User.create({
+      email: 'test.user@email.com',
+      firstName: 'Test',
+      lastName: 'User',
+      password: 'foo',
+      isAdmin: true,
+    });
+  });
+
+  afterEach(async () => {
+    await User.deleteMany({});
+  });
+
+  describe('POST /api/v1/accounts/login', () => {
+    it('Performs Account Login', async () => {
+      const payload = {
+        email: 'test.user@email.com',
+        password: 'foo',
+      };
+
+      const response = await request(app)
+          .post('/api/v1/accounts/login')
+          .send(payload);
+
+      expect(response.status).toBe(201);
+      expect(response.body.token).toBeDefined();
+    });
+  });
+
+  describe('GET /api/v1/accounts/detail', () => {
+    it('Retrieves Account Details', async () => {
+      const user = await User.findOne({
+        email: 'test.user@email.com',
+      });
+      user.token = {key: generateKey()};
+      await user.save();
+
+      const response = await request(app)
+          .get('/api/v1/accounts/detail')
+          .set('Authorization', `Token ${user.token.key}`);
+
+      expect(response.status).toBe(200);
+      expect(response.body.email).toBe(user.email);
+      expect(response.body.firstName).toBe(user.firstName);
+      expect(response.body.lastName).toBe(user.lastName);
+    });
+
+    it('Returns 401 if not authorized', async () => {
+      const response = await request(app).get('/api/v1/accounts/detail');
+
+      expect(response.status).toBe(401);
+    });
+  });
+
+  describe('DELETE /api/v1/accounts/logout', () => {
+    it('Performs Account Logout', async () => {
+      const user = await User.findOne({
+        email: 'test.user@email.com',
+      });
+      user.token = {key: generateKey()};
+      await user.save();
+
+      const response = await request(app)
+          .delete('/api/v1/accounts/logout')
+          .set('Authorization', `Token ${user.token.key}`);
+
+      expect(response.status).toBe(204);
+    });
+
+    it('Returns 401 if not authorized', async () => {
+      const response = await request(app).delete('/api/v1/accounts/logout');
+
+      expect(response.status).toBe(401);
+    });
   });
 });
+
+
+// import 'dotenv/config';
+// import mongoose from 'mongoose';
+// import request from 'supertest';
+
+// import {getRequestListener} from '../src/cli/bootstrap';
+// import {User} from '../src/models';
+// import {generateKey} from '../src/utils/token';
+
+// const app = getRequestListener();
+
+// describe('Account API Tests', () => {
+//   beforeEach(async () => {
+//     await mongoose.connect(process.env.MONGO_URI);
+//     await User.create({
+//       email: 'test.user@email.com',
+//       firstName: 'Test',
+//       lastName: 'User',
+//       password: 'foo',
+//       isAdmin: true,
+//     });
+//   });
+
+//   afterEach(async () => {
+//     await User.findOneAndDelete({email: 'test.user@email.com'});
+//     await mongoose.connection.close();
+//   });
+
+//   describe('POST /api/v1/accounts/login', () => {
+//     it('Performs Account Login', async () => {
+//       const payload = {email: 'test.user@email.com', password: 'foo'};
+//       const response = await request(app)
+//           .post('/api/v1/accounts/login')
+//           .send(payload);
+//       console.log(response.body);
+//       expect(response.status).toBe(201);
+//     });
+//   });
+
+//   describe('GET /api/v1/accounts/detail', () => {
+//     it('Retrieves Account Details', async () => {
+//       const user = await User.findOne({email: 'test.user@email.com'});
+//       if (!user.token) {
+//         user.token = {key: generateKey()};
+//         await user.save();
+//       }
+//       console.log(user.token);
+
+//       const response = await request(app)
+//           .get('/api/v1/accounts/detail')
+//           .set('Authorization', `Token ${user.token.key}`);
+
+//       console.log(response.body);
+//       expect(response.status).toBe(200);
+//     });
+//   });
+
+//   describe('DELETE /api/v1/accounts/logout', () => {
+//     it('Performs Account Logout', async () => {
+//       const user = await User.findOne({email: 'test.user@email.com'});
+//       console.log(user.token);
+//       if (!user.token) {
+//         user.token = {key: generateKey()};
+//         await user.save();
+//       }
+//       console.log(user.token);
+
+//       const response = await request(app)
+//           .delete('/api/v1/accounts/logout')
+//           .set('Authorization', `Token ${user.token.key}`);
+//       console.log(response.body);
+//       expect(response.status).toBe(204);
+//     });
+//   });
+// });

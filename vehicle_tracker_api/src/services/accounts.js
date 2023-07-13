@@ -13,7 +13,7 @@ export async function performLoginService(payload) {
   if (!success) return null;
   if (!user.token) {
     user.token = {key: generateKey()};
-    user.lastLogin = user.token.created;
+    user.lastLogin = new Date();
     await user.save();
   }
 

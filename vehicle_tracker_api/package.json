@@ -4,13 +4,13 @@
   "description": "Vehicle Tracking APIs",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint --fix src/**/*",
+    "lint": "eslint --fix src/**/* tests/**/*.test.js",
     "createsuperuser": "node dist/app.js createsuperuser",
     "createsuperuser:dev": "babel-node src/app.js createsuperuser",
     "build": "babel src --out-dir dist",
     "start": "node dist/app.js runserver",
     "start:dev": "nodemon --exec babel-node src/app.js runserver",
-    "test": "jest"
+    "test": "jest -i"
   },
   "jest": {
     "transform": {

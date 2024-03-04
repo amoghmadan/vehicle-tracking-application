@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import {Tracker} from '../models';
+import {Tracker} from '@/models';
 
 describe('Tracker Service Tests', () => {
   beforeAll(async () => {
@@ -20,7 +20,9 @@ describe('Tracker Service Tests', () => {
 
   describe('retrieveTrackerService', () => {
     it('Retrieves a tracker by ID', async () => {
-      const trackerData = { /* mock tracker data */ };
+      const trackerData = {
+        /* mock tracker data */
+      };
       Tracker.findById.mockResolvedValue(trackerData);
 
       const result = await retrieveTrackerService('trackerId');
@@ -37,9 +39,13 @@ describe('Tracker Service Tests', () => {
 
   describe('createTrackerService', () => {
     it('Creates a new tracker', async () => {
-      const payload = { /* mock payload */ };
+      const payload = {
+        /* mock payload */
+      };
       const user = {_id: 'userId'};
-      const createdTracker = { /* mock created tracker */ };
+      const createdTracker = {
+        /* mock created tracker */
+      };
       Tracker.prototype.save = jest.fn().mockResolvedValue(createdTracker);
 
       const result = await createTrackerService(payload, user);
@@ -49,7 +55,9 @@ describe('Tracker Service Tests', () => {
 
   describe('updateTrackerService', () => {
     it('Updates a tracker by ID', async () => {
-      const updatedTracker = { /* mock updated tracker */ };
+      const updatedTracker = {
+        /* mock updated tracker */
+      };
       Tracker.findByIdAndUpdate.mockResolvedValue(updatedTracker);
 
       const result = await updateTrackerService('trackerId', {});
@@ -66,36 +74,53 @@ describe('Tracker Service Tests', () => {
 
   describe('listTrackerService', () => {
     it('Retrieves a list of trackers for a date', async () => {
-      const query = { /* mock query */ };
-      const trackers = [{ /* mock tracker 1 */ }, { /* mock tracker 2 */ }];
+      const query = {
+        /* mock query */
+      };
+      const trackers = [
+        {
+          /* mock tracker 1 */
+        },
+        {
+          /* mock tracker 2 */
+        },
+      ];
       Tracker.find.mockResolvedValue(trackers);
 
       const result = await listTrackerService(query);
       expect(result).toEqual(trackers);
     });
 
-    it('Retrieves a list of trackers for current date if no date is provided',
-        async () => {
-          const currentDate = new Date().toISOString().split('T')[0];
-          const query = {};
-          const trackers = [{ /* mock tracker 1 */ }, { /* mock tracker 2 */ }];
-          Tracker.find.mockResolvedValue(trackers);
+    it('Lists trackers for current date, if no date is provided', async () => {
+      const currentDate = new Date().toISOString().split('T')[0];
+      const query = {};
+      const trackers = [
+        {
+          /* mock tracker 1 */
+        },
+        {
+          /* mock tracker 2 */
+        },
+      ];
+      Tracker.find.mockResolvedValue(trackers);
 
-          const result = await listTrackerService(query);
-          expect(result).toEqual(trackers);
-          expect(Tracker.find).toHaveBeenCalledWith({
-            created: {
-              $gte: new Date(`${currentDate}T00:00:00Z`),
-              $lte: new Date(`${currentDate}T23:59:59Z`),
-            },
-          });
-        });
+      const result = await listTrackerService(query);
+      expect(result).toEqual(trackers);
+      expect(Tracker.find).toHaveBeenCalledWith({
+        created: {
+          $gte: new Date(`${currentDate}T00:00:00Z`),
+          $lte: new Date(`${currentDate}T23:59:59Z`),
+        },
+      });
+    });
   });
 
   describe('leftFacilityService', () => {
     it('Marks out time for a tracker', async () => {
       const user = {_id: 'userId'};
-      const updatedTracker = { /* mock updated tracker */ };
+      const updatedTracker = {
+        /* mock updated tracker */
+      };
       Tracker.findByIdAndUpdate.mockResolvedValue(updatedTracker);
 
       const result = await leftFacilityService('trackerId', user);

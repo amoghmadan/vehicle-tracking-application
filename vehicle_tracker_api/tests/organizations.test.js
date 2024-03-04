@@ -1,11 +1,11 @@
 import 'dotenv/config';
 import mongoose from 'mongoose';
-import request from 'supertest';
+import supertest from 'supertest';
 
-import {getRequestListener} from '../src/cli/bootstrap';
-import {Organization} from '../src/models';
+import {getsupertestListener} from '@/cli/bootstrap';
+import {Organization} from '@/models';
 
-const app = getRequestListener();
+const request = supertest(getsupertestListener());
 
 describe('Organization API Tests', () => {
   let authToken;
@@ -18,7 +18,7 @@ describe('Organization API Tests', () => {
       password: 'foo',
     };
 
-    const loginResponse = await request(app)
+    const loginResponse = await request
         .post('/api/v1/accounts/login')
         .send(loginPayload);
 
@@ -44,7 +44,7 @@ describe('Organization API Tests', () => {
         description: 'Test description',
       };
 
-      const response = await request(app)
+      const response = await request
           .post('/api/v1/organizations')
           .set('Authorization', `Token ${authToken}`)
           .send(payload);
@@ -66,7 +66,7 @@ describe('Organization API Tests', () => {
         description: 'Description 2',
       });
 
-      const response = await request(app)
+      const response = await request
           .get('/api/v1/organizations')
           .set('Authorization', `Token ${authToken}`);
 
@@ -83,7 +83,7 @@ describe('Organization API Tests', () => {
         description: 'Test description',
       });
 
-      const response = await request(app)
+      const response = await request
           .get(`/api/v1/organizations/${organization._id}`)
           .set('Authorization', `Token ${authToken}`);
 
@@ -94,7 +94,7 @@ describe('Organization API Tests', () => {
     });
 
     it('Returns 404 if Organization not found', async () => {
-      const response = await request(app)
+      const response = await request
           .get('/api/v1/organizations/123456789')
           .set('Authorization', `Token ${authToken}`);
 
@@ -113,7 +113,7 @@ describe('Organization API Tests', () => {
         name: 'Updated Organization',
       };
 
-      const response = await request(app)
+      const response = await request
           .patch(`/api/v1/organizations/${organization._id}`)
           .set('Authorization', `Token ${authToken}`)
           .send(payload);
@@ -129,7 +129,7 @@ describe('Organization API Tests', () => {
         name: 'Updated Organization',
       };
 
-      const response = await request(app)
+      const response = await request
           .patch('/api/v1/organizations/123456789')
           .set('Authorization', `Token ${authToken}`)
           .send(payload);
@@ -145,7 +145,7 @@ describe('Organization API Tests', () => {
         description: 'Test description',
       });
 
-      const response = await request(app)
+      const response = await request
           .delete(`/api/v1/organizations/${organization._id}`)
           .set('Authorization', `Token ${authToken}`);
 
@@ -153,7 +153,7 @@ describe('Organization API Tests', () => {
     });
 
     it('Returns 404 if Organization not found', async () => {
-      const response = await request(app)
+      const response = await request
           .delete('/api/v1/organizations/123456789')
           .set('Authorization', `Token ${authToken}`);
 

@@ -1,12 +1,12 @@
 import 'dotenv/config';
 import mongoose from 'mongoose';
-import request from 'supertest';
+import supertest from 'supertest';
 
-import {getRequestListener} from '../src/cli/bootstrap';
-import {User} from '../src/models';
-import {generateKey} from '../src/utils/token';
+import {getsupertestListener} from '@/cli/bootstrap';
+import {User} from '@/models';
+import {generateKey} from '@/utils/token';
 
-const app = getRequestListener();
+const request = supertest(getsupertestListener());
 
 describe('Account API Tests', () => {
   beforeAll(async () => {
@@ -39,7 +39,7 @@ describe('Account API Tests', () => {
         password: 'foo',
       };
 
-      const response = await request(app)
+      const response = await request
           .post('/api/v1/accounts/login')
           .send(payload);
 
@@ -56,7 +56,7 @@ describe('Account API Tests', () => {
       user.token = {key: generateKey()};
       await user.save();
 
-      const response = await request(app)
+      const response = await request
           .get('/api/v1/accounts/detail')
           .set('Authorization', `Token ${user.token.key}`);
 
@@ -67,7 +67,7 @@ describe('Account API Tests', () => {
     });
 
     it('Returns 401 if not authorized', async () => {
-      const response = await request(app).get('/api/v1/accounts/detail');
+      const response = await request.get('/api/v1/accounts/detail');
 
       expect(response.status).toBe(401);
     });
@@ -81,7 +81,7 @@ describe('Account API Tests', () => {
       user.token = {key: generateKey()};
       await user.save();
 
-      const response = await request(app)
+      const response = await request
           .delete('/api/v1/accounts/logout')
           .set('Authorization', `Token ${user.token.key}`);
 
@@ -89,23 +89,22 @@ describe('Account API Tests', () => {
     });
 
     it('Returns 401 if not authorized', async () => {
-      const response = await request(app).delete('/api/v1/accounts/logout');
+      const response = await request.delete('/api/v1/accounts/logout');
 
       expect(response.status).toBe(401);
     });
   });
 });
 
-
 // import 'dotenv/config';
 // import mongoose from 'mongoose';
-// import request from 'supertest';
+// import supertest from 'supertest';
 
-// import {getRequestListener} from '../src/cli/bootstrap';
+// import {getsupertestListener} from '../src/cli/bootstrap';
 // import {User} from '../src/models';
 // import {generateKey} from '../src/utils/token';
 
-// const app = getRequestListener();
+// const app = getsupertestListener();
 
 // describe('Account API Tests', () => {
 //   beforeEach(async () => {
@@ -127,7 +126,7 @@ describe('Account API Tests', () => {
 //   describe('POST /api/v1/accounts/login', () => {
 //     it('Performs Account Login', async () => {
 //       const payload = {email: 'test.user@email.com', password: 'foo'};
-//       const response = await request(app)
+//       const response = await request
 //           .post('/api/v1/accounts/login')
 //           .send(payload);
 //       console.log(response.body);
@@ -144,7 +143,7 @@ describe('Account API Tests', () => {
 //       }
 //       console.log(user.token);
 
-//       const response = await request(app)
+//       const response = await request
 //           .get('/api/v1/accounts/detail')
 //           .set('Authorization', `Token ${user.token.key}`);
 
@@ -163,7 +162,7 @@ describe('Account API Tests', () => {
 //       }
 //       console.log(user.token);
 
-//       const response = await request(app)
+//       const response = await request
 //           .delete('/api/v1/accounts/logout')
 //           .set('Authorization', `Token ${user.token.key}`);
 //       console.log(response.body);

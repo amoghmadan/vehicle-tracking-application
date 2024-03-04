@@ -1,4 +1,4 @@
-import {loginSchema} from './accounts';
+import {changePasswordSchema, createUserSchema, loginSchema} from './accounts';
 import {
   createOrganizationSchema,
   updateOrganizationSchema,
@@ -10,8 +10,10 @@ import {
 } from './tracker';
 
 export {
+  changePasswordSchema,
   createOrganizationSchema,
   createTrackerSchema,
+  createUserSchema,
   loginSchema,
   outTimeSchema,
   updateOrganizationSchema,

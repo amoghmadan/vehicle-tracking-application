@@ -1,4 +1,5 @@
 import bootstrap from './bootstrap';
-import createsuperuser from './createsuperuser';
+import changePassword from './changepassword';
+import createSuperUser from './createsuperuser';
 
-export {bootstrap, createsuperuser};
+export {bootstrap, changePassword, createSuperUser};

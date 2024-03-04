@@ -1,4 +1,4 @@
-import {Organization} from '../models';
+import {Organization} from '@/models';
 
 /**
  * Create new Organization

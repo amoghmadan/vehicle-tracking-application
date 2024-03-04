@@ -12,5 +12,5 @@
 *.vsix
 
 # Others
-certs
-datadb
+certs/
+mongodb/

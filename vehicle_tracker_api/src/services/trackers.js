@@ -1,4 +1,4 @@
-import {Tracker} from '../models';
+import {Tracker} from '@/models';
 
 /**
  * Retrieve Tracker By ID

@@ -8,7 +8,7 @@ Change .env according to your system setup.
 
 ```bash
 npm i  # Install dependencies
-npm run start:dev  # Runs the development server
+npm run dev bootstrap  # Runs the development server
 ```
 
 ## How to prepare for production?
@@ -26,9 +26,9 @@ npm run build  # Generates the build
 - Finally follow the command below.
 
 ```bash
-npm start
+npm start bootstrap
 ```
 
 # .env what can I configure?
 
-- MONGO_URI = mongodb://<username>:<password>@<host>:<port>/<dbname>
+- MONGODB_URI = mongodb://<username>:<password>@<host>:<port>/<dbname>

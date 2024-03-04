@@ -1,34 +1,39 @@
-import Joi from 'joi';
 import mongoose from 'mongoose';
+import {read} from 'read';
 
-import {User} from '../models';
-import {MONGO_URI} from '../settings';
-
-const createSuperUserSchema = Joi.object({
-  email: Joi.string().email().required(),
-  firstName: Joi.string().min(3).required(),
-  lastName: Joi.string().min(1).required(),
-  password: Joi.string().min(3).required(),
-});
+import {User} from '@/models';
+import {createUserSchema} from '@/validators';
+import {MONGODB_URI} from '@/settings';
 
 /**
- * Create new super user.
- * @param {String} email
- * @param {String} firstName
- * @param {String} lastName
- * @param {String} password
+ * Create super user
  */
-export default async function createsuperuser(
-    email,
-    firstName,
-    lastName,
-    password,
-) {
-  const args = {
-    email, firstName, lastName, password,
-  };
-  const validatedData = await createSuperUserSchema.validateAsync(args);
-  const newUser = new User({...validatedData, isAdmin: true});
-  await mongoose.connect(MONGO_URI);
-  await newUser.save();
+export default async function createSuperUser() {
+  const email = await read({prompt: 'Email: '});
+  const firstName = await read({prompt: 'First name: '});
+  const lastName = await read({prompt: 'Last name: '});
+  const password = await read({prompt: 'Password: '});
+  const passwordAgain = await read({prompt: 'Password (again): '});
+
+  try {
+    const validatedData = await createUserSchema.validateAsync({
+      email,
+      firstName,
+      lastName,
+      password,
+      passwordAgain,
+    });
+    await mongoose.connect(MONGODB_URI);
+    const user = await User.findOne({email});
+    if (user) {
+      console.error('Error: That email is already taken.');
+      process.exit(2);
+    }
+    await User.create({...validatedData, isAdmin: true});
+  } catch (err) {
+    console.error(err);
+    process.exit(2);
+  }
+  console.info('Superuser created successfully.');
+  process.exit(0);
 }

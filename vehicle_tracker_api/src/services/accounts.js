@@ -1,5 +1,5 @@
-import {User} from '../models';
-import {generateKey} from '../utils/token';
+import {User} from '@/models';
+import {generateKey} from '@/utils/token';
 
 /**
  * Performs Login.

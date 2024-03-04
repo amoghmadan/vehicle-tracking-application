@@ -1,43 +1,50 @@
 import yargs from 'yargs';
 
-import {bootstrap, createsuperuser} from './cli';
+import {bootstrap, changePassword, createSuperUser} from './cli';
 
 yargs
     .strict()
+    .scriptName('app')
+    .usage('$0 <cmd> [args]')
     .command(
-        'runserver [port] [host]',
-        'Run server',
+        'bootstrap [port] [host]',
+        'Bootstrap application',
         (setup) => {
           setup
               .positional('port', {
-                type: 'number', describe: 'Port', default: 8000,
+                default: 8000,
+                description: 'Port',
+                type: 'number',
               })
               .positional('host', {
-                type: 'string',
-                describe: 'Host',
                 default: '::',
+                description: 'Host',
+                type: 'string',
               });
         },
         async (args) => {
-          await bootstrap(Number(args.port), args.host);
+          await bootstrap(Number(args.port), args.string);
         },
     )
     .command(
-        'createsuperuser [email] [firstName] [lastName] [password]',
-        'Create admin user',
+        'changepassword [email]',
+        'Change password',
         (setup) => {
-          setup
-              .positional('email', {type: 'string', describe: 'Email'})
-              .positional('firstName', {type: 'string', describe: 'First name'})
-              .positional('lastName', {type: 'string', describe: 'Last name'})
-              .positional('password', {type: 'string', describe: 'Password'});
+          setup.positional('email', {
+            description: 'Email',
+            type: 'string',
+          });
         },
         async (args) => {
-          await createsuperuser(
-              args.email,
-              args.firstName,
-              args.lastName,
-              args.password,
-          );
+          await changePassword(args.email);
         },
-    ).argv;
+    )
+    .command(
+        'createsuperuser',
+        'Create super user',
+        (_) => {}, // Nothing to setup
+        async (_) => {
+          await createSuperUser(); // No args to process
+        },
+    )
+    .help().argv;

@@ -1,8 +1,6 @@
 import {STATUS_CODES} from 'http';
 
-import {User} from '../models';
-
-const EXCLUDE_URLS = ['/api/v1/accounts/login'];
+import {User} from '@/models';
 
 /**
  * Authenticate users.
@@ -12,9 +10,6 @@ const EXCLUDE_URLS = ['/api/v1/accounts/login'];
  * @return {Promise<express.Response | void>}
  */
 export default async function authenticate(request, response, next) {
-  if (EXCLUDE_URLS.includes(request.path)) {
-    return next();
-  }
   const keyword = 'Token';
   const authorization = request.headers?.authorization;
   if (!authorization) {

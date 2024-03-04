@@ -5,12 +5,11 @@ import helmet from 'helmet';
 import mongoose from 'mongoose';
 import morgan from 'morgan';
 
-import {authenticate} from '../middlewares';
-import urlpatterns from '../routes';
-import {MONGO_URI} from '../settings';
+import routes from '@/routes';
+import {MONGODB_URI} from '@/settings';
 
 /**
- * Create request listener.
+ * Get request listener
  * @return {express.Application}
  */
 export function getRequestListener() {
@@ -19,27 +18,25 @@ export function getRequestListener() {
   application.use(express.urlencoded({extended: true}));
   application.use(express.json());
   application.use(morgan('combined'));
-  application.use(authenticate);
 
-  urlpatterns.forEach((router, pattern) => {
-    application.use(pattern, router);
+  routes.forEach((router, path) => {
+    application.use(path, router);
   });
 
   return application;
 }
 
 /**
- * Bootstrap the application.
- * @param {Number} port
- * @param {String} host
+ * Bootstrap application
+ * @param {number} port
+ * @param {string} host
  */
 export default async function bootstrap(port, host) {
-  const requestListener = getRequestListener();
-
   const options = {};
+  const requestListener = getRequestListener();
   const server = new Server(options, requestListener);
 
-  await mongoose.connect(MONGO_URI);
+  await mongoose.connect(MONGODB_URI);
   server.listen(port, host, () => {
     console.log(server.address());
   });

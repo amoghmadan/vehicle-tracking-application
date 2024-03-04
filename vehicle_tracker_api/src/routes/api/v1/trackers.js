@@ -5,12 +5,16 @@ import {
   leftFacilityController,
   listTrackerController,
   updateTrackerController,
-} from '../../../controllers';
+} from '@/controllers';
+import {authenticate} from '@/middlewares';
 
 // eslint-disable-next-line new-cap
 const trackers = Router();
-trackers.route('/').get(listTrackerController).post(createTrackerController);
-trackers.route('/:id').patch(updateTrackerController);
-trackers.route('/:id/out').post(leftFacilityController);
+trackers
+    .route('/')
+    .get(authenticate, listTrackerController)
+    .post(authenticate, createTrackerController);
+trackers.route('/:id').patch(authenticate, updateTrackerController);
+trackers.route('/:id/out').post(authenticate, leftFacilityController);
 
 export default trackers;
